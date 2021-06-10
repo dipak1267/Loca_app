@@ -6,6 +6,7 @@ import 'package:sample_app/singup.dart';
 import 'package:http/http.dart' as http;
 import 'forgotpass.dart';
 import 'home_page.dart';
+import 'model/model_Data.dart';
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -18,6 +19,7 @@ class _LoginState extends State<Login> {
   @override
   GlobalKey<FormState> _key = new GlobalKey();
   String mail,password;
+
   Widget build(BuildContext context) {
     return Scaffold(
       body:ListView(
@@ -254,9 +256,11 @@ class _LoginState extends State<Login> {
     );
     print(res.statusCode);
    if(res.statusCode == 200){
-     var str = jsonDecode(res.body);
-     Navigator.push(context, MaterialPageRoute(builder: (context)=> Homep()));
-     print(str);
+     var str = modelDataFromJson(res.body);
+     if(str.status == 1){
+       Navigator.push(context, MaterialPageRoute(builder: (context)=> Homep(str.data.email,str.data.username)));
+     }
+     print(str.data.email);
    }
      // print(res);
     return res;

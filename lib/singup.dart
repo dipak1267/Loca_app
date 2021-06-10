@@ -7,6 +7,7 @@ import 'package:custom_check_box/custom_check_box.dart';
 import 'package:http/http.dart' as http;
 import 'home_page.dart';
 import 'loginpage.dart';
+import 'model/registration_model.dart';
 
 class singup extends StatefulWidget {
   const singup({Key key}) : super(key: key);
@@ -394,31 +395,40 @@ class _singupState extends State<singup> {
     var res = await http.post(
       Uri.parse('http://codonnier.tech/jaydeep/container/dev/Service.php?Service=userRegistration'),
         headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'User-Agent': "container1102",
-              "App-Secret": "container1102",
-              "App-Track-Version":"v1",
-              "App-Device-Type":"iOS",
+          'Content-Type': 'application/json',
+          'User-Agent': "container1102",
+          "App-Secret": "container1102",
+          "App-Track-Version":"v1",
+          "App-Device-Type":"iOS",
           "App-Store-Version":"1.1",
           "App-Device-Model":"iPhone 8",
           "App-Os-Version":"iOS 11",
           "App-Store-Build-Number":"1.1",
 
             },
-      body: jsonEncode(<String, String>{"username": _username,
+      body: jsonEncode(<String, dynamic>{"username": _username,
         "email": _email,
         "password": _password,
         "registration_code": _registrationCode,
+        "user_type":"user",
         "social_id":"",
+
 
 
       }),
     );
     print(res.statusCode);
     if(res.statusCode == 200){
-    var str = jsonDecode(res.body);
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> Homep()));
-    print(str);
+    var str = modelDataFromJson(res.body);
+
+      if(str.status == 1){
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Homep(str.data.email,str.data.username)));
+      }
+
+    print(str.status);
+      print(str.data.email);
+      print(res.body);
     }
   }
 

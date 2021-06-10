@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 
-class Homep extends StatefulWidget {
-  const Homep({Key key}) : super(key: key);
+import 'loginpage.dart';
 
-  @override
-  _HomepState createState() => _HomepState();
-}
+class Homep extends StatelessWidget {
+  final email;
+  final name;
 
-class _HomepState extends State<Homep> {
+  Homep(this.email,this.name);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(child: Text("Welcome ${name}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
+          Center(child: Text("Email:- ${email}",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
+        ],
+      ),
+    );
   }
 }
