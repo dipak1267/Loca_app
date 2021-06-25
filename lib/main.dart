@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sample_app/singup.dart';
+import 'package:sample_app/screen/singup.dart';
 
 
-import 'loginpage.dart';
+import 'screen/loginpage.dart';
 
 void main() {
   runApp(

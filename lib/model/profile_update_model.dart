@@ -1,12 +1,11 @@
-
 import 'dart:convert';
 
-ModelData modelDataFromJson(String str) => ModelData.fromJson(json.decode(str));
+Profileupload profileuploadFromJson(String str) => Profileupload.fromJson(json.decode(str));
 
-String modelDataToJson(ModelData data) => json.encode(data.toJson());
+String profileuploadToJson(Profileupload data) => json.encode(data.toJson());
 
-class ModelData {
-  ModelData({
+class Profileupload {
+  Profileupload({
     this.data,
     this.msg,
     this.status,
@@ -16,7 +15,7 @@ class ModelData {
   String msg;
   int status;
 
-  factory ModelData.fromJson(Map<String, dynamic> json) => ModelData(
+  factory Profileupload.fromJson(Map<String, dynamic> json) => Profileupload(
     data: Data.fromJson(json["data"]),
     msg: json["msg"],
     status: json["status"],
@@ -62,8 +61,8 @@ class Data {
   String socialId;
   String profileImage;
   String address;
-  var latitude;
-  var longitude;
+  double latitude;
+  double longitude;
   String stripeId;
   String connectStripeId;
   String deviceType;

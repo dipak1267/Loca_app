@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'home_page.dart';
-import 'main.dart';
+import '../main.dart';
 
 class Forgotp extends StatefulWidget {
   const Forgotp({Key key}) : super(key: key);

@@ -7,7 +7,7 @@ import 'package:custom_check_box/custom_check_box.dart';
 import 'package:http/http.dart' as http;
 import 'home_page.dart';
 import 'loginpage.dart';
-import 'model/registration_model.dart';
+import '../model/registration_model.dart';
 
 class singup extends StatefulWidget {
   const singup({Key key}) : super(key: key);

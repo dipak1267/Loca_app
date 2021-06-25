@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:sample_app/singup.dart';
+import 'package:sample_app/screen/singup.dart';
 import 'package:http/http.dart' as http;
 import 'forgotpass.dart';
 import 'home_page.dart';
-import 'model/model_Data.dart';
+import '../model/model_Data.dart';
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -232,9 +232,9 @@ class _LoginState extends State<Login> {
       ),
     );
   }
- loginuser(String _email,String _password, ) async{
+ loginuser(var _email,var _password, ) async{
 
-    var res =await http.post(
+    var res = await http.post(
       Uri.parse('http://codonnier.tech/jaydeep/container/dev/Service.php?Service=userlogin'),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -255,8 +255,10 @@ class _LoginState extends State<Login> {
 
     );
     print(res.statusCode);
+    print(res.body);
    if(res.statusCode == 200){
      var str = modelDataFromJson(res.body);
+   
      if(str.status == 1){
        Navigator.push(context, MaterialPageRoute(builder: (context)=> Homep(str.data.email,str.data.username)));
      }

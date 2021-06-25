@@ -62,8 +62,8 @@ class Data {
   String socialId;
   String profileImage;
   String address;
-  int latitude;
-  int longitude;
+  var latitude;
+  var longitude;
   String stripeId;
   String connectStripeId;
   String deviceType;
