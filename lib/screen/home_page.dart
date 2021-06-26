@@ -1,16 +1,14 @@
-
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sample_app/extras/profile_update.dart';
 import 'package:sample_app/main.dart';
 import 'package:sample_app/model/profile_update_model.dart';
-import 'package:http_parser/http_parser.dart';
 
 class Homep extends StatefulWidget {
   final email;
@@ -117,9 +115,9 @@ class _HomepState extends State<Homep> {
                 ),
                 OutlinedButton(
                   onPressed: () async {
-                   var res = await uploadImage(imagefile.path);
+                    // var res = await uploadImage(imagefile.path);
                   },
-                  child: Text('Submmite'),
+                  child: Text('Submit'),
                 ),
                 SizedBox(
                   height: 100,
@@ -161,73 +159,35 @@ class _HomepState extends State<Homep> {
               children: [
                 RaisedButton(
                   onPressed: () async {
-                    await _opencamera();
+                    await _openCamera();
                   },
                   child: Text("From camera"),
                 ),
                 RaisedButton(
                   onPressed: () async {
-                    await _opengallary();
+                    await _openGallery();
                   },
-                  child: Text("From Gallary"),
+                  child: Text("From Gallery"),
                 ),
               ],
             ));
   }
 
-  _opencamera() async {
-     _filed = await _picker.getImage(source: ImageSource.camera);
-    setState(() {
+  _openCamera() async {
+    _filed = await _picker.getImage(source: ImageSource.camera);
+
+    imagefile = File(_filed.path);
+    Navigator.of(context).pop();
+    await uploadImage(imagefile.path);
+  }
+
+  _openGallery() async {
+    _filed = await _picker.getImage(source: ImageSource.gallery);
+
       imagefile = File(_filed.path);
       Navigator.of(context).pop();
-    });
+
+    await uploadImage(imagefile.path);
   }
 
-  _opengallary() async {
-     _filed = await _picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      imagefile = File(_filed.path);
-      Navigator.of(context).pop();
-    });
-  }
-
-     uploadImage(file) async {
-    if (file != null) {
-     var  headers =  <String, String>{
-        'Content-Type': 'application/json',
-        'User-Agent': "container1102",
-        "App-Secret": "container1102",
-        "App-Track-Version":"v1",
-        "App-Device-Type":"iOS",
-        "App-Store-Version":"1.1",
-        "App-Device-Model":"iPhone 8",
-        "App-Os-Version":"iOS 11",
-        "App-Store-Build-Number":"1.1",
-        "auth_token":"14437a391c370fd10441db24085320437ad40451f4745e49c83174c9969102135214",
-      };
-     // final Map<String, String> body = {
-     //   "firstName": "dipak1",
-     //   "lastName": "ramooliya",
-     // };
-
-      var url = Uri.parse(
-          "http://codonnier.tech/jaydeep/container/devService.php?Service=updateUserDetails&show_error=true");
-      var request =  http.MultipartRequest('POST', url);
-          request.headers.addAll(headers);
-          // request.fields.addAll(body);
-     var mimeType = lookupMimeType(file.path).split("/");
-      request.files.add(http.MultipartFile('profile_image',
-          File(file).readAsBytes().asStream(), File(file).lengthSync(),
-          filename: file.split("/").last,
-          contentType: MediaType(mimeType[0], mimeType[1]),
-      ),
-
-      );
-      var res = await request.send();
-
-     print(request.toString());
-     print("================================${res.statusCode}");
-
-    }
-  }
 }
