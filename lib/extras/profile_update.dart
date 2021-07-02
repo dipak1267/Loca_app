@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
+import 'package:sample_app/model/profile_update_model.dart';
 
 uploadImage(String file) async {
   if (file != null) {
@@ -48,8 +49,11 @@ uploadImage(String file) async {
     var res = await request.send();
     res.stream.transform(utf8.decoder).listen((value) {
       if (res.statusCode == 200) {
-        var val = jsonDecode(value);
-        print(val);
+        var val = profileuploadFromJson(value);
+        if(val.status == 1){
+          print("hurry======================================");
+
+        }
       } else {
         print("error in submit");
       }

@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sample_app/controller/loogin_controller.dart';
 import 'package:sample_app/screen/singup.dart';
-import 'package:http/http.dart' as http;
+import 'package:sample_app/services/login_service.dart';
+import 'package:sample_app/widgets/textfield.dart';
 import 'forgotpass.dart';
-import 'home_page.dart';
-import '../model/model_Data.dart';
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -17,9 +18,11 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   @override
-  GlobalKey<FormState> _key = new GlobalKey();
-  String mail,password;
 
+
+  GlobalKey<FormState> _key = new GlobalKey();
+  var _email = TextEditingController();
+  var _password = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       body:ListView(
@@ -78,29 +81,18 @@ class _LoginState extends State<Login> {
                     Center(
                       child: Container(
                         width: 350,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Mail',
-
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                          ),
-                          validator: (val){
-                            if(val.isEmpty){
-
-                              return "Please enter mail";
+                        child: App_TextField(
+                          label: "Email",
+                          isPassword: false,
+                          type: TextInputType.emailAddress,
+                          cursorColour : Colors.white,
+                          controller: _email,
+                          validator: (value) {
+                            if (_email.text.isEmpty) {
+                              return "Please enter email.";
                             }
-                            else null;
+                            return null;
                           },
-                          onSaved: (val)=> mail = val,
                         ),
                       ),
                     ),
@@ -110,28 +102,20 @@ class _LoginState extends State<Login> {
                     Center(
                       child: Container(
                         width: 350,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Password',
-
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                          ),
-                          validator: (val1){
-                            if(val1.length<6){
-
-                              return "Enter valid password";
+                        child: App_TextField(
+                          label: "Password",
+                          type: TextInputType.emailAddress,
+                          isPassword: true,
+                          cursorColour : Colors.white,
+                          controller: _password,
+                          validator: (value) {
+                            if (_email.text.isEmpty) {
+                              return "Please enter Password.";
+                            }else if (_password.text.length < 6){
+                              return "Password must have 6 characters";
                             }
-                            else null;
+                            return null;
                           },
-                          onSaved: (val)=> password = val,
                         ),
                       ),
                     ),
@@ -186,7 +170,7 @@ class _LoginState extends State<Login> {
                       onTap: (){
                         if(_key.currentState.validate()){
                          _key.currentState.save();
-                         loginuser(mail, password);
+                         Services.loginuser(_email.text,_password.text);
                         }
                       },
                     ),
@@ -231,41 +215,6 @@ class _LoginState extends State<Login> {
         ],
       ),
     );
-  }
- loginuser(var _email,var _password, ) async{
-
-    var res = await http.post(
-      Uri.parse('http://codonnier.tech/jaydeep/container/dev/Service.php?Service=userlogin'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'User-Agent': "container1102",
-        "App-Secret": "container1102",
-        "App-Track-Version":"v1",
-        "App-Device-Type":"iOS",
-        "App-Store-Version":"1.1",
-        "App-Device-Model":"iPhone 8",
-        "App-Os-Version":"iOS 11",
-        "App-Store-Build-Number":"1.1",
-
-      },
-      body: jsonEncode(<String, dynamic> {
-        "email": _email,
-        "password": _password,
-      }),
-
-    );
-    print(res.statusCode);
-    print(res.body);
-   if(res.statusCode == 200){
-     var str = modelDataFromJson(res.body);
-   
-     if(str.status == 1){
-       Navigator.push(context, MaterialPageRoute(builder: (context)=> Homep(str.data.email,str.data.username)));
-     }
-     print(str.data.email);
-   }
-     // print(res);
-    return res;
   }
 }
 

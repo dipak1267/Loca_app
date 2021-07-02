@@ -1,21 +1,20 @@
-import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sample_app/extras/constance.dart';
 import 'package:sample_app/extras/profile_update.dart';
 import 'package:sample_app/main.dart';
+import 'package:sample_app/model/login_model_Data.dart';
 import 'package:sample_app/model/profile_update_model.dart';
 
 class Homep extends StatefulWidget {
-  final email;
-  final name;
-
-  Homep(this.email, this.name);
-
   @override
   _HomepState createState() => _HomepState();
 }
@@ -25,8 +24,9 @@ class _HomepState extends State<Homep> {
   PickedFile _filed;
   final _picker = ImagePicker();
   Profileupload profile;
+  loginModel Login;
   var multipartFile;
-
+  final userDetail = GetStorage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +74,7 @@ class _HomepState extends State<Homep> {
                         height: 14,
                       ),
                       Text(
-                        widget.name,
+                        userDetail.read(Storages.USER_NAME),
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w600),
                       ),
@@ -82,7 +82,7 @@ class _HomepState extends State<Homep> {
                         height: 10,
                       ),
                       Text(
-                        widget.email,
+                          userDetail.read(Storages.USER_EMAIL),
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w600),
                       ),
@@ -124,8 +124,10 @@ class _HomepState extends State<Homep> {
                 ),
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()));
+                    userDetail.write(Storages.IS_LOGGED_IN, false);
+                    userDetail.remove(Storages.USER_NAME);
+                    userDetail.remove(Storages.USER_EMAIL);
+                    Get.offAll(MyApp());
                   },
                   child: Text('Log Out'),
                 ),
@@ -143,7 +145,7 @@ class _HomepState extends State<Homep> {
       Permission.camera.request();
       Fluttertoast.showToast(
           msg:
-              "You cant add image if you want to add image allow camera permision");
+              "You cant add image if you want to add image allow camera permission");
     } else if (camerastatus.isGranted) {
       selection();
     } else {
