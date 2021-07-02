@@ -21,11 +21,6 @@ class singup extends StatefulWidget {
 }
 
 class _singupState extends State<singup> {
-  @override
-  @override
-  void initState() {
-    super.initState();
-    }
   GlobalKey<FormState> _key = new GlobalKey();
 
    // String username,lastname,email,password,password1,registrationCode;

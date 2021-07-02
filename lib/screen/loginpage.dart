@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:sample_app/controller/loogin_controller.dart';
 import 'package:sample_app/screen/singup.dart';
 import 'package:sample_app/services/login_service.dart';
+import 'package:sample_app/widgets/startup_topbar.dart';
 import 'package:sample_app/widgets/textfield.dart';
 import 'forgotpass.dart';
 
@@ -28,18 +29,7 @@ class _LoginState extends State<Login> {
       body:ListView(
 
         children: [
-          SizedBox(
-            height: 40,
-          ),
-          Center(
-            child: Image.asset('asset/logo.png',width: 150,),
-          ),
-          SizedBox(
-            height: 70,
-          ),
-          Center(
-            child: Image.asset('asset/buid.png',width: 300,),
-          ),
+          StartUpTopBar(),
           Container(
 
             decoration: BoxDecoration(
