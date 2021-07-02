@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
-import 'home_page.dart';
+import 'package:sample_app/widgets/textfield.dart';
 import '../main.dart';
 
 class Forgotp extends StatefulWidget {
@@ -15,7 +15,7 @@ class Forgotp extends StatefulWidget {
 
 class _ForgotpState extends State<Forgotp> {
   GlobalKey<FormState> _key = new GlobalKey();
-  String mail;
+  var _email = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,29 +79,18 @@ class _ForgotpState extends State<Forgotp> {
                       Center(
                         child: Container(
                           width: 350,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'Mail',
-
-                              hintStyle: TextStyle(
-                                color: Colors.white,
-
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                            ),
-                            validator: (val){
-                              if(val.isEmpty){
-                                setState(() {
-                                  val = mail;
-                                });
-                                return "Please enter mail";
+                          child:  App_TextField(
+                            label: "Password",
+                            type: TextInputType.emailAddress,
+                            cursorColour : Colors.white,
+                            controller: _email,
+                            validator: (value) {
+                              if (_email.text.isEmpty) {
+                                return "Please enter Password.";
+                              }else if (_email.text.isEmpty){
+                                return "Please Enter Email";
                               }
-                              else null;
+                              return null;
                             },
                           ),
                         ),
@@ -139,7 +128,7 @@ class _ForgotpState extends State<Forgotp> {
                         onTap: (){
                           if(_key.currentState.validate()){
                             try{
-                                forgetpassword(mail);
+                                forgetpassword(_email.text);
                             }catch(e){
                               print(e);
                             }

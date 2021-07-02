@@ -1,18 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:sample_app/screen/singup.dart';
+import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
+import 'package:sample_app/extras/constance.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:sample_app/screen/home_page.dart';
 
 
-import 'screen/loginpage.dart';
-
-void main() {
+void main() async{
+    await GetStorage.init();
   runApp(
+      GetMaterialApp(
 
-      MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: MyApp(),
-      )
+        home: SplaceScreen(),
+        getPages: Routes.route,
+      ),
+
   );
 }
+
+class SplaceScreen extends StatefulWidget {
+
+
+  @override
+  _SplaceScreenState createState() => _SplaceScreenState();
+}
+
+class _SplaceScreenState extends State<SplaceScreen> {
+  @override
+  final userdetail = GetStorage();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: (
+      Center(
+        child: CircularProgressIndicator(),
+      )),
+      );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+      print(userdetail.read(Storages.IS_LOGGED_IN));
+      userdetail.writeIfNull(Storages.IS_LOGGED_IN, false);
+
+
+    Future.delayed(Duration.zero,()async{;
+      await userdetail.read(Storages.IS_LOGGED_IN) ? Get.toNamed(Routes.HOME) : Get.toNamed(Routes.Main);
+    });
+  }
+}
+
 
 class MyApp extends StatefulWidget {
   const MyApp({Key key}) : super(key: key);
@@ -23,13 +61,15 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  // AssetImage logo =
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       body:Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
+
             begin: Alignment(0.0, -1.0),
             end: Alignment(0.0, 1.0),
             colors: [const Color(0xff2f2f8e), const Color(0xff8e2f8e)],
@@ -82,7 +122,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+               Get.toNamed(Routes.SIGN_IN);
               },
             ),
             SizedBox(
@@ -111,7 +151,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>singup()));
+                Get.toNamed(Routes.SIGN_UP);
               },
             ),
           ],
@@ -120,6 +160,8 @@ class _MyAppState extends State<MyApp> {
     );
 
   }
+
+
 }
 
 
